@@ -48,7 +48,7 @@ function getImage($fileName, $source) {
 $fileName = $_GET['_q'];
 
 // Loop through all available sources until we get on that works
-foreach (IMAGE_SOT as $source) {
+foreach ($IMAGE_SOT as $source) {
     $file = getImage($fileName, $source);
     if ($file) {
         break;
