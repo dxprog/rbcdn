@@ -30,9 +30,9 @@ function prepDirectoryPath($file) {
 function getImage($fileName, $source) {
     $retVal = false;
 
-    // Verify the image is OK first
+    // Verify the image is okay first
     $url = $source . $fileName;
-    $headers = get_headers($url, 1);
+    $headers = @get_headers($url, 1);
 
     if ($headers && strpos($headers[0], '200') !== false) {
         $retVal = file_get_contents($url);
