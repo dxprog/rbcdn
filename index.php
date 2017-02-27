@@ -111,9 +111,9 @@ function resizeImage($file) {
 
         // Clean up
         imagedestroy($resizedImg);
-        unlink($tmpFile);
-
     }
+
+    unlink($tmpFile);
     imagedestroy($img);
 }
 
