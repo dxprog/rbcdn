@@ -9,9 +9,9 @@ class ImageFetch {
 
   private $_sources;
 
-  public function __construct($path, array $sources) {
+  public function __construct($path, array $sources, $localPath) {
     $this->imagePath = $path;
-    $this->localPath = LOCAL_PATH . $path;
+    $this->localPath = $localPath . $path;
     $this->_sources = $sources;
   }
 
