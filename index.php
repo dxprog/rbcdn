@@ -23,9 +23,9 @@ $pathInfo = extractPathInfo($_GET['_q']);
 $processor = null;
 if ($pathInfo->isMobile) {
   require('./src/mobile-fetch.php');
-  $processor = new MobileFetch($pathInfo->path);
+  $processor = new MobileFetch($pathInfo->path, $IMAGE_SOT);
 } else {
-  $processor = new ImageFetch($pathInfo->path);
+  $processor = new ImageFetch($pathInfo->path, $IMAGE_SOT);
 }
 
 // If anything is amiss, just 404

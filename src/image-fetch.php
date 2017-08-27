@@ -7,9 +7,12 @@ class ImageFetch {
   public $imageData;
   public $contentType;
 
-  public function __construct($path) {
+  private $_sources;
+
+  public function __construct($path, array $sources) {
     $this->imagePath = $path;
     $this->localPath = LOCAL_PATH . $path;
+    $this->_sources = $sources;
   }
 
   /**
@@ -17,12 +20,9 @@ class ImageFetch {
    * @return {boolean} Whether the fetch was successful or not
    */
   public function fetch() {
-    // Never thought I'd use this again...
-    global $IMAGE_SOT;
-
     // Loop through all sources and attempt a fetch
     // Bail on the first success
-    foreach ($IMAGE_SOT as $source) {
+    foreach ($this->_sources as $source) {
       if ($this->fetchFromSource($source)) {
         return true;
       }
