@@ -43,13 +43,7 @@ final class ResponderTest extends TestCase {
   function testFetchesAndSendsMobileImage() {
     $this->responder->processRequest($this->createResponderConfig('/m' . SOURCE_1_PNG));
     $this->assertEquals($this->outputWriter->headers['Content-Type'], 'image/jpeg', 'the wrong Content-Type was sent');
-
-    // Save the output to disk
-    $tmpFile = tempnam(sys_get_temp_dir(), 'rbcdn-test');
-    file_put_contents($tmpFile, $this->outputWriter->output);
-    $mobileImageInfo = exec('file ' . $tmpFile);
-    $this->assertTrue(strpos($mobileImageInfo, '1080x1010') !== false, 'the resized image has incorrect dimensions. got: ' . $mobileImageInfo);
-    unlink($tmpFile);
+    $this->assertTrue(\ImageAssert::assertBufferDimensions($this->outputWriter->output, 1080, 1010));
   }
 
   function testSends404WhenImageNotFound() {
@@ -62,15 +56,5 @@ final class ResponderTest extends TestCase {
     $this->responder->processRequest($this->createResponderConfig(SOURCE_1_PNG, 'HEAD'));
     $this->assertTrue(isset($this->outputWriter->headers['HTTP/1.1 404 Not Found']), 'the 404 header was not written');
     $this->assertTrue($this->outputWriter->responseEnded, 'the response was not ended');
-  }
-
-  function testSavesTheFetchedImageWithPath() {
-    $instance = new ImageFetch(SOURCE_2_JPG, SOURCES, $this->storagePath);
-    if ($instance->fetch()) {
-      $instance->save();
-      $this->assertEquals(md5_file(SOURCES[1] . SOURCE_2_JPG), md5_file($this->storagePath . SOURCE_2_JPG), 'saved image data differs from source');
-    } else {
-      $this->assertTrue(false, 'unable to load second source image');
-    }
   }
 }
