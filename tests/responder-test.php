@@ -48,7 +48,7 @@ final class ResponderTest extends TestCase {
     $tmpFile = tempnam(sys_get_temp_dir(), 'rbcdn-test');
     file_put_contents($tmpFile, $this->outputWriter->output);
     $mobileImageInfo = exec('file ' . $tmpFile);
-    $this->assertTrue(strpos($mobileImageInfo, '1080x1010') !== false, 'the resized image has incorrect dimensions');
+    $this->assertTrue(strpos($mobileImageInfo, '1080x1010') !== false, 'the resized image has incorrect dimensions. got: ' . $mobileImageInfo);
     unlink($tmpFile);
   }
 

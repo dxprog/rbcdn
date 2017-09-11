@@ -48,7 +48,7 @@ final class MobileFetchTest extends TestCase {
 
       // Verify the image size and content-type
       $mobileImageInfo = exec('file ' . $savedMobileImage);
-      $this->assertTrue(strpos($mobileImageInfo, '1080x1010') !== false, 'the resized image has incorrect dimensions');
+      $this->assertTrue(strpos($mobileImageInfo, '1080x1010') !== false, 'the resized image has incorrect dimensions. got: ' . $mobileImageInfo);
       $this->assertEquals(mime_content_type($savedMobileImage), 'image/jpeg', 'the image was not saved as a JPEG');
     } else {
       $this->assertTrue(false, 'unable to load first source image');

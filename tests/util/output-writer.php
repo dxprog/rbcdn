@@ -5,7 +5,7 @@ class OutputWriter {
   public $responseEnded = false;
   public $output = '';
 
-  public function getInstance() {
+  public static function getInstance() {
     static $instance;
     if (!$instance) {
       $instance = new OutputWriter();
