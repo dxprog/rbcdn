@@ -34,7 +34,7 @@ final class ImageFetchTest extends TestCase {
   }
 
   function testReturnsFalseForUnfoundImage() {
-    $instance = new ImageFetch('/some-mage-up-nonsense.jpg', SOURCES, $this->storagePath);
+    $instance = new ImageFetch('/some-made-up-nonsense.jpg', SOURCES, $this->storagePath);
     $this->assertFalse($instance->fetch(), 'image marked as found when file does not exist');
   }
 

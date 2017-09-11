@@ -34,7 +34,7 @@ final class MobileFetchTest extends TestCase {
   }
 
   function testReturnsFalseForUnfoundImage() {
-    $instance = new MobileFetch('/some-mage-up-nonsense.jpg', SOURCES, $this->storagePath);
+    $instance = new MobileFetch('/some-made-up-nonsense.jpg', SOURCES, $this->storagePath);
     $this->assertFalse($instance->fetch(), 'image marked as found when file does not exist');
   }
 

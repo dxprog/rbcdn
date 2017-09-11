@@ -1,7 +1,7 @@
 <?php
 
 require('./config.php');
-require('./src/util/output-writer.php');
+require('./tests/util/output-writer.php');
 require('./src/util/http-helpers.php');
 require('./src/responder.php');
 require('./src/image-fetch.php');
