@@ -10,6 +10,19 @@ define('MOBILE_MAX_WIDTH', 1080);
 class MobileFetch extends ImageFetch {
 
   private $hasLocalCopy = false;
+  private $baseStoragePath;
+
+  /**
+   * ImageFetch constructor
+   *
+   * @param string $path The path to the file to be fetched
+   * @param string[] $sources The array of sources to scan for the file
+   * @param string $storagePath The path to save files. Must have trailing slash
+   */
+  public function __construct($path, array $sources, $storagePath) {
+    parent::__construct($path, $sources, $storagePath);
+    $this->baseStoragePath = $storagePath;
+  }
 
   public function fetch() {
     // First, check to see if there's a normal version of the image
@@ -35,7 +48,7 @@ class MobileFetch extends ImageFetch {
         parent::save();
       }
 
-      $mobilePath = LOCAL_PATH . '/m' . $this->imagePath;
+      $mobilePath = $this->baseStoragePath . '/m' . $this->imagePath;
       $this->prepDirectoryPath($mobilePath);
 
       // Attempt to do a resize
