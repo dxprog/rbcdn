@@ -1,22 +1,38 @@
 <?php
 
 function getHeaders($url) {
-  // If the URL is an HTTP request, just use get_headers. Otherwise,
+  $retVal = null;
+
+  // If the URL is an HTTP request, do a HEAD request. Otherwise,
   // check the local file system and mimic the output.
   if (strpos($url, 'http') === 0) {
-    return @get_headers($url, 1);
-  } else {
-    $retVal = [
-      0 => 'HTTP/1.1 404 Not Found',
-      'Content-Length' => 0
-    ];
-
-    if (file_exists($url)) {
-      $retVal[0] = 'HTTP/1.1 200 OK';
-      $retVal['Content-Length'] = filesize($url);
-      $retVal['Content-Type'] = mime_content_type($url);
+    $context  = stream_context_create([ 'http' => [ 'method' => 'HEAD' ] ]);
+    $stream = @fopen($url, 'rb', false, $context);
+    if ($stream) {
+      $data = @stream_get_meta_data($stream);
+      if ($data) {
+        $retVal = [ 0 => '' ];
+        $headers = $data['wrapper_data'];
+        foreach ($headers as $header) {
+          if (strpos($header, 'HTTP') === 0) {
+            $retVal[0] = $header;
+          } else {
+            $kvp = explode(':', $header, 2);
+            $retVal[$kvp[0]] = $kvp[1];
+          }
+        }
+      }
     }
-
-    return $retVal;
+    fclose($stream);
+  } else {
+    if (file_exists($url)) {
+      $retVal = [
+        0 => 'HTTP/1.1 200 OK',
+        'Content-Length' => filesize($url),
+        'Content-Type' => mime_content_type($url)
+      ];
+    }
   }
+
+  return $retVal;
 }
