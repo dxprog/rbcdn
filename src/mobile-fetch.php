@@ -14,9 +14,9 @@ class MobileFetch extends ImageFetch {
   public function fetch() {
     // First, check to see if there's a normal version of the image
     // already fetched.
-    if (file_exists($this->localPath)) {
-      $this->contentType = mime_content_type($this->localPath);
-      $this->imageData = file_get_contents($this->localPath);
+    if (file_exists($this->storagePath)) {
+      $this->contentType = mime_content_type($this->storagePath);
+      $this->imageData = file_get_contents($this->storagePath);
       $this->hasLocalCopy = true;
       return true;
     } else {
@@ -51,7 +51,7 @@ class MobileFetch extends ImageFetch {
       } else {
         // If nothing was done to the original file, just create
         // a symlink to it so we can save some space
-        symlink(realpath($this->localPath), $mobilePath);
+        symlink(realpath($this->storagePath), $mobilePath);
       }
     }
   }
