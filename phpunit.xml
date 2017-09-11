@@ -5,4 +5,15 @@
       <directory suffix="-test.php">./tests</directory>
     </testsuite>
   </testsuites>
+  <filter>
+    <whitelist addUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">./src</directory>
+      <exclude>
+        <file>./src/util/output-writer.php</file>
+      </exclude>
+    </whitelist>
+  </filter>
+  <logging>
+    <log type="coverage-html" target="./coverage" lowUpperBound="85" highLowerBound="95"/>
+  </logging>
 </phpunit>
