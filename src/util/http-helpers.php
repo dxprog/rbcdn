@@ -1,31 +1,22 @@
 <?php
 
-/**
- * Given an image path, creates a normalized path
- * and determines if it's a mobile targeted image
- */
-function extractPathInfo($url) {
-  $retVal = (object)[
-    'isMobile' => false,
-    'path' => '/'
-  ];
+function getHeaders($url) {
+  // If the URL is an HTTP request, just use get_headers. Otherwise,
+  // check the local file system and mimic the output.
+  if (strpos($url, 'http') === 0) {
+    return @get_headers($url, 1);
+  } else {
+    $retVal = [
+      0 => 'HTTP/1.1 404 Not Found',
+      'Content-Length' => 0
+    ];
 
-  // Normalize the path and determine if this is a mobile target
-  // Mobile is denoted by a path starting with /m/
-  $info = pathinfo($url);
-  $dir = trim(str_replace('/', ' ', $info['dirname']));
-  if (strlen($dir) > 0) {
-    $dir = explode(' ', $dir);
-    if ($dir[0] === 'm') {
-      $retVal->isMobile = true;
-      array_shift($dir);
+    if (file_exists($url)) {
+      $retVal[0] = 'HTTP/1.1 200 OK';
+      $retVal['Content-Length'] = filesize($url);
+      $retVal['Content-Type'] = mime_content_type($url);
     }
 
-    if (count($dir) > 0) {
-      $retVal->path .= implode('/', $dir) . '/';
-    }
+    return $retVal;
   }
-
-  $retVal->path .= $info['basename'];
-  return $retVal;
 }

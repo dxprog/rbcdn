@@ -3,15 +3,22 @@
 class ImageFetch {
 
   public $imagePath;
-  public $localPath;
+  public $storagePath;
   public $imageData;
   public $contentType;
 
   private $_sources;
 
-  public function __construct($path, array $sources, $localPath) {
+  /**
+   * ImageFetch constructor
+   *
+   * @param string $path The path to the file to be fetched
+   * @param string[] $sources The array of sources to scan for the file
+   * @param string $storagePath The path to save files. Must have trailing slash
+   */
+  public function __construct($path, array $sources, $storagePath) {
     $this->imagePath = $path;
-    $this->localPath = $localPath . $path;
+    $this->storagePath = $storagePath . $path;
     $this->_sources = $sources;
   }
 
@@ -36,8 +43,8 @@ class ImageFetch {
    */
   public function save() {
     if ($this->imageData) {
-      $this->prepDirectoryPath($this->localPath);
-      file_put_contents($this->localPath, $this->imageData);
+      $this->prepDirectoryPath($this->storagePath);
+      file_put_contents($this->storagePath, $this->imageData);
     }
   }
 
@@ -46,7 +53,7 @@ class ImageFetch {
 
     // Verify the image is okay first
     $url = $source . $this->imagePath;
-    $headers = @get_headers($url, 1);
+    $headers = getHeaders($url);
 
     if ($headers && strpos($headers[0], '200') !== false && (int) $headers['Content-Length'] > 0) {
       $data = @file_get_contents($url);
@@ -64,9 +71,9 @@ class ImageFetch {
    * Creates all directories of a file path as needed
    */
   protected function prepDirectoryPath($path) {
-    $path = pathinfo($path);
-    if (!file_exists($path['dirname'])) {
-      mkdir(LOCAL_PATH . implode('/', $path), 777, true);
+    $pathInfo = pathinfo($path);
+    if (!is_dir($pathInfo['dirname'])) {
+      mkdir($pathInfo['dirname'], 0777, true);
     }
   }
 }
