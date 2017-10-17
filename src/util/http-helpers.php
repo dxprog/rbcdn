@@ -22,8 +22,8 @@ function getHeaders($url) {
           }
         }
       }
+      fclose($stream);
     }
-    fclose($stream);
   } else {
     if (file_exists($url)) {
       $retVal = [
